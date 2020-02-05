@@ -4,28 +4,64 @@ namespace MarsRover
 {
     public static class Program
     {
+        private static Plateau plateau;
+
         private static void Main(string[] args)
         {
-            Plateau plateau;
-            string input;
-
             Console.Write("Plateau Grid (x, y):\t");
-            input = Console.ReadLine();
-            plateau = Plateau.Define(input);
+            var input = Console.ReadLine();
+            try
+            {
+                plateau = Plateau.Define(input);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
 
-            var index = 1;
             while (true)
             {
-                Console.Write($"Landing Position #{index}:\t");
-                input = Console.ReadLine();
-                plateau.Deploy(input);
-
-                Console.Write($"Control Rover #{index}:\t");
-                input = Console.ReadLine();
-                var rover = plateau.Explore(input);
-
-                Console.WriteLine($"#{index++} Final Position:\t{rover.Position}");
+                DeployRover();
+                var rover = ExplorePlateau();
+                Console.WriteLine($"#{plateau.TotalRovers} Final Position:\t{rover.Position}");
             }
+        }
+
+        private static Rover DeployRover()
+        {
+            Console.Write($"Landing Position #{plateau.TotalRovers + 1}:\t");
+            var input = Console.ReadLine();
+            try
+            {
+                var rover = plateau.Deploy(input);
+                return rover;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                DeployRover();
+            }
+
+            return null;
+        }
+
+        private static Rover ExplorePlateau()
+        {
+            Console.Write($"Control Rover #{plateau.TotalRovers}:\t");
+            var input = Console.ReadLine();
+            try
+            {
+                var rover = plateau.Explore(input);
+                return rover;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                ExplorePlateau();
+            }
+
+            return null;
         }
     }
 }
