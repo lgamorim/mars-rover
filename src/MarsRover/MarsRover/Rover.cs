@@ -13,6 +13,8 @@ namespace MarsRover
 
         public Position Position { get; private set; }
 
+        public Position Probe => Position.MoveForward();
+
         public static Rover Land(Position position)
         {
             var rover = new Rover {Position = position};

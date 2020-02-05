@@ -35,10 +35,10 @@ namespace MarsRover
             var y = int.Parse(location[1]);
             Enum.TryParse(location[2], out CardinalPoint orientation);
 
-            if (x < 0 || y < 0)
-                throw new ArgumentException("The X and Y coordinates must be equal to or greater than zero.");
-
             var position = new Position(x, y, orientation);
+            if (IsRoverPositionOutsideBoundaries(position))
+                throw new RoverPositionOutsidePlateauException("The rover cannot land outside the plateau boundaries.");
+
             var rover = Rover.Land(position);
             Squad.Add(rover);
 
@@ -60,8 +60,9 @@ namespace MarsRover
                         rover.SpinRight();
                         break;
                     case Instruction.M:
-                        if (IsRoverMovingOutsideBoundaries(rover))
-                            throw new RoverMovingOutsidePlateauException("The rover cannot move outside the plateau boundaries.");
+                        var newPosition = rover.Probe;
+                        if (IsRoverPositionOutsideBoundaries(newPosition))
+                            throw new RoverPositionOutsidePlateauException("The rover cannot move outside the plateau boundaries.");
 
                         rover.MoveForward();
                         break;
@@ -71,12 +72,10 @@ namespace MarsRover
             return rover;
         }
 
-        private bool IsRoverMovingOutsideBoundaries(Rover rover)
+        private bool IsRoverPositionOutsideBoundaries(Position position)
         {
-            var position = rover.Position;
-            var newPosition = position.MoveForward();
-            if (newPosition.X > Surface.Width || newPosition.Y > Surface.Height) return true;
-            if (newPosition.X < 0 || newPosition.Y < 0) return true;
+            if (position.X > Surface.Width || position.Y > Surface.Height) return true;
+            if (position.X < 0 || position.Y < 0) return true;
 
             return false;
         }

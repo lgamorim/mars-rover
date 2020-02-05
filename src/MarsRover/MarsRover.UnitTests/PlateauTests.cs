@@ -95,19 +95,20 @@ namespace MarsRover.UnitTests
             rover2.Position.Equals(new Position(5, 1, CardinalPoint.E));
         }
 
-        [Fact]
-        public void ShouldThrowExceptionWhenDeployingOutsideBoundaries()
+        [Theory]
+        [InlineData(-1, -2, CardinalPoint.N), InlineData(6, 7, CardinalPoint.E)]
+        public void ShouldThrowExceptionWhenDeployingOutsideBoundaries(int x, int y, CardinalPoint cardinalPoint)
         {
             //Arrange
             const string coordinates = "5 5";
-            const string position = "-1 -2 N";
+            var position = MapFlat(x, y, cardinalPoint);
 
             //Act
             var plateau = Plateau.Define(coordinates);
             var action = new Action(() => plateau.Deploy(position));
 
             //Assert
-            action.Should().Throw<ArgumentException>();
+            action.Should().Throw<RoverPositionOutsidePlateauException>();
         }
 
         [Fact]
@@ -124,7 +125,7 @@ namespace MarsRover.UnitTests
             var action = new Action(() => plateau.Explore(instructions));
 
             //Assert
-            action.Should().Throw<RoverMovingOutsidePlateauException>();
+            action.Should().Throw<RoverPositionOutsidePlateauException>();
         }
 
         [Fact]
