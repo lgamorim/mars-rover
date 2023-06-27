@@ -33,10 +33,10 @@ public class Rover
         Position = Position.MoveForward();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj != null && obj.GetType() != GetType()) return false;
-        var other = (Rover) obj;
+        var other = obj as Rover;
         return other != null && other.Id.Equals(Id);
     }
 
