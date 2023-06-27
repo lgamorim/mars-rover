@@ -33,6 +33,8 @@ public class Rover
         Position = Position.MoveForward();
     }
 
+    public Position Probe() => Position.MoveForward();
+
     public override bool Equals(object? obj)
     {
         if (obj != null && obj.GetType() != GetType()) return false;
