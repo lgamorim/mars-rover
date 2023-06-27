@@ -1,6 +1,6 @@
 namespace MarsRover;
 
-public class Position
+public readonly struct Position
 {
     public Position(int x, int y, CardinalPoint cardinalPoint)
     {
@@ -17,80 +17,47 @@ public class Position
 
     public Position SpinLeft()
     {
-        Position newPosition;
-        switch (CardinalPoint)
+        var newPosition = CardinalPoint switch
         {
-            case CardinalPoint.N:
-                newPosition = new Position(X, Y, CardinalPoint.W);
-                break;
-            case CardinalPoint.E:
-                newPosition = new Position(X, Y, CardinalPoint.N);
-                break;
-            case CardinalPoint.S:
-                newPosition = new Position(X, Y, CardinalPoint.E);
-                break;
-            case CardinalPoint.W:
-                newPosition = new Position(X, Y, CardinalPoint.S);
-                break;
-            default:
-                newPosition = null;
-                break;
-        }
+            CardinalPoint.N => new Position(X, Y, CardinalPoint.W),
+            CardinalPoint.E => new Position(X, Y, CardinalPoint.N),
+            CardinalPoint.S => new Position(X, Y, CardinalPoint.E),
+            CardinalPoint.W => new Position(X, Y, CardinalPoint.S),
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
         return newPosition;
     }
 
     public Position SpinRight()
     {
-        Position newPosition;
-        switch (CardinalPoint)
+        var newPosition = CardinalPoint switch
         {
-            case CardinalPoint.N:
-                newPosition = new Position(X, Y, CardinalPoint.E);
-                break;
-            case CardinalPoint.E:
-                newPosition = new Position(X, Y, CardinalPoint.S);
-                break;
-            case CardinalPoint.S:
-                newPosition = new Position(X, Y, CardinalPoint.W);
-                break;
-            case CardinalPoint.W:
-                newPosition = new Position(X, Y, CardinalPoint.N);
-                break;
-            default:
-                newPosition = null;
-                break;
-        }
+            CardinalPoint.N => new Position(X, Y, CardinalPoint.E),
+            CardinalPoint.E => new Position(X, Y, CardinalPoint.S),
+            CardinalPoint.S => new Position(X, Y, CardinalPoint.W),
+            CardinalPoint.W => new Position(X, Y, CardinalPoint.N),
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
         return newPosition;
     }
 
     public Position MoveForward()
     {
-        Position newPosition;
-        switch (CardinalPoint)
+        var newPosition = CardinalPoint switch
         {
-            case CardinalPoint.N:
-                newPosition = new Position(X, Y + 1, CardinalPoint);
-                break;
-            case CardinalPoint.E:
-                newPosition = new Position(X + 1, Y, CardinalPoint);
-                break;
-            case CardinalPoint.S:
-                newPosition = new Position(X, Y - 1, CardinalPoint);
-                break;
-            case CardinalPoint.W:
-                newPosition = new Position(X - 1, Y, CardinalPoint);
-                break;
-            default:
-                newPosition = null;
-                break;
-        }
+            CardinalPoint.N => new Position(X, Y + 1, CardinalPoint),
+            CardinalPoint.E => new Position(X + 1, Y, CardinalPoint),
+            CardinalPoint.S => new Position(X, Y - 1, CardinalPoint),
+            CardinalPoint.W => new Position(X - 1, Y, CardinalPoint),
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
         return newPosition;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is null) return false;
         if (obj.GetType() != GetType()) return false;
@@ -107,5 +74,15 @@ public class Position
     public override string ToString()
     {
         return X + " " + Y + " " + CardinalPoint;
+    }
+
+    public static bool operator ==(Position left, Position right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Position left, Position right)
+    {
+        return !(left == right);
     }
 }

@@ -1,6 +1,6 @@
 namespace MarsRover;
 
-public class Surface
+public readonly struct Surface
 {
     public Surface(int width, int height)
     {
@@ -13,7 +13,7 @@ public class Surface
 
     public int Width { get; }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is null) return false;
         if (obj.GetType() != GetType()) return false;
@@ -30,5 +30,15 @@ public class Surface
     public override string ToString()
     {
         return Width + " " + Height;
+    }
+
+    public static bool operator ==(Surface left, Surface right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Surface left, Surface right)
+    {
+        return !(left == right);
     }
 }
