@@ -28,7 +28,7 @@ public class PlateauTests
     [Fact]
     public void Should_ThrowArgumentNullException_When_InputToDefineIsNull()
     {
-        var action = new Action(() => Plateau.Define(null));
+        var action = new Action(() => Plateau.Define(null!));
 
         action.Should().ThrowExactly<ArgumentNullException>();
     }
@@ -105,7 +105,7 @@ public class PlateauTests
         const string coordinates = "5 5";
         var plateau = Plateau.Define(coordinates);
 
-        var action = new Action(() => plateau.Deploy(null));
+        var action = new Action(() => plateau.Deploy(null!));
 
         action.Should().ThrowExactly<ArgumentNullException>();
     }
